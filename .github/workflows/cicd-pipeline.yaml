@@ -26,8 +26,7 @@ jobs: #bygga koden, vårt CI-jobb
         with:
           name: .net-app
           path: ${{env.DOTNET_ROOT}}/myapp
-
-deploy:
+  deploy:
     runs-on: windows-latest
     needs: build
     environment:
