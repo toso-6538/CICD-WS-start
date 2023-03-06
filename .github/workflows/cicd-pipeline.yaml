@@ -1,0 +1,23 @@
+name: Build and Deploy to Azure
+
+on:
+  push:
+  workflow_dispatch:  #tillåter manuell push
+  
+jobs: #bygga koden, vårt CI-jobb
+  build: #döpt jobbet till build, jobb nr 1, build är bara namnet, kommer köras på en virtuell maskin som github sätter upp
+    runs-on: windows-latest #här definieras vilken virtuell maskin vi ska köra vår kod på
+    
+    steps: #vad ska ske i jobbet? Vi ska bygga koden, men vilken kod arbetar vi mer? checkas ut här
+      - uses: actions/checkout@v3 #definiera vilken action vi vill hämta, github har ett bibliotek, vi kan även skapa egna
+      
+      - name: Set up .NET Core SDK #vår maskin har inte .net installerat, det måste installeras, sker här
+        uses: actions/setup-dotnet@v2 #dotnetspecifikt, koden är skriven i dotnet6, se nästa rad
+        with:
+          dotnet-version: '6.0.x' #nu har vi allt som krävs för att bygga koden, vår virtuella maskin med dotnet SDK
+          
+      - name: Build with dotnet #enklare att göra med kommando
+        run: dotnet build --configuration Release #den här raden kod fungerar för att det är på windows och att vi har vår SDK installerad
+        
+      - name: Publish with dotnet #lägga det på en bra plats på vår virtuella maskin så vi kan hämta när vi ska bygga
+        run: dotnet publish .c Release .o ${{env.DOTNET_ROOT}}/myapp #vi behöver inte ta ut hela folderstrukturen, utan lägger den i en mapp som heter myapp
