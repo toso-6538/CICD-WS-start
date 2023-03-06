@@ -21,6 +21,12 @@ jobs: #bygga koden, vårt CI-jobb
         
       - name: Publish with dotnet #lägga det på en bra plats på vår virtuella maskin så vi kan hämta när vi ska bygga
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp #vi behöver inte ta ut hela folderstrukturen, utan lägger den i en mapp som heter myapp
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v3
+        with:
+          name: .net-app
+          path: ${{env.DOTNET_ROOT}}/myapp
+
 deploy:
     runs-on: windows-latest
     needs: build
