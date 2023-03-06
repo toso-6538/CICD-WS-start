@@ -21,22 +21,24 @@ jobs: #bygga koden, vårt CI-jobb
         
       - name: Publish with dotnet #lägga det på en bra plats på vår virtuella maskin så vi kan hämta när vi ska bygga
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp #vi behöver inte ta ut hela folderstrukturen, utan lägger den i en mapp som heter myapp
-  deploy:
+deploy:
     runs-on: windows-latest
     needs: build
     environment:
       name: 'Production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-      steps:
-        - name: Download artifact from build job
-         uses: actions/download-artifact@v3
-         with:
-            name: .net-app 
+      url: ${{cicd-demo-workshop-6538}}
+    
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v3
+        with:
+          name: .net-app
+      
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: {cicd-demo-workshop-6538}
+          app-name: cicd-demo-ws
           slot-name: Production
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: .
