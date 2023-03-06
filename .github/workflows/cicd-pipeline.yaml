@@ -20,4 +20,4 @@ jobs: #bygga koden, vårt CI-jobb
         run: dotnet build --configuration Release #den här raden kod fungerar för att det är på windows och att vi har vår SDK installerad
         
       - name: Publish with dotnet #lägga det på en bra plats på vår virtuella maskin så vi kan hämta när vi ska bygga
-        run: dotnet publish .c Release .o ${{env.DOTNET_ROOT}}/myapp #vi behöver inte ta ut hela folderstrukturen, utan lägger den i en mapp som heter myapp
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp #vi behöver inte ta ut hela folderstrukturen, utan lägger den i en mapp som heter myapp
